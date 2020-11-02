@@ -10,22 +10,29 @@ import static org.hamcrest.Matchers.equalTo;
 @RunWith(SpringRunner.class)
 @IntegrationTest
 public class AverageIT {
+    AverageController ac;
     @Test
     public void when_no_parameter_supplied_should_print_a_message() {
-        var response = given()
+        // @formatter:off
+        given()
+                .param("numbers","")
                 .when()
                 .get("/api/average")
                 .then()
-                .body("message",equalTo("Please put parameters."));
+                .statusCode(200)
+                .body(equalTo("Please put parameters."));
+        // @formatter:on
     }
 
     @Test
     public void should_remove_trailing_zero_case_1() {
-        var response = given()
+        // @formatter:off
+        given()
                 .when()
-                .param("1,2,3,4")
+                .param("numbers", "2,3")
                 .get("/api/average")
                 .then()
-                .body("message",equalTo("Average equals: 1.5"));
+                .body("message", equalTo("Average equals: 2.5"));
+        // @formatter:on
     }
 }
