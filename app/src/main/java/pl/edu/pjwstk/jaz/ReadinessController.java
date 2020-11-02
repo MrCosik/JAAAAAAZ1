@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @RestController
-public class ReadinesController {
+public class ReadinessController {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -15,7 +15,6 @@ public class ReadinesController {
     public void readinessTest() {
 //        var entity = new Test1Entity();
 //        entity.setName("sdavsda");
-//
 //        em.persist(entity);
     }
 }

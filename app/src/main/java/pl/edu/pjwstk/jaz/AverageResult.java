@@ -1,6 +1,5 @@
 package pl.edu.pjwstk.jaz;
 
-import java.math.BigDecimal;
 
 public class AverageResult {
 
@@ -10,7 +9,7 @@ public class AverageResult {
         this.message = message;
     }
 
-    public String getResault() {
+    public String getMessage() {
         return message;
     }
 }
