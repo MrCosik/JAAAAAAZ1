@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     private final AuthenticationService authenticationService;
 
+
     public LoginController(AuthenticationService authenticationService){
         this.authenticationService = authenticationService;
     }

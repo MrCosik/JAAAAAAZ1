@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @IntegrationTest
 public class ExampleTest {
+
     @Test
     public void should_respond_to_readiness_request() {
         // @formatter:off
@@ -21,6 +22,6 @@ public class ExampleTest {
         // @formatter:on
         var statusCode = response.getStatusCode();
 
-        //assertThat(statusCode).isEqualTo(200);
+        assertThat(statusCode).isEqualTo(200);
     }
 }

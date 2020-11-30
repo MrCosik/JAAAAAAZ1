@@ -12,6 +12,7 @@ public class ExampleFilter extends HttpFilter {
 
     private final UserSession userSession;
 
+
     public ExampleFilter(UserSession userSession) {
         this.userSession = userSession;
     }
@@ -26,6 +27,7 @@ public class ExampleFilter extends HttpFilter {
     }
 
     private boolean isSiteAllowed(HttpServletRequest request) {
+        //request.getSession().getServletContext().
         return false;
     }
 

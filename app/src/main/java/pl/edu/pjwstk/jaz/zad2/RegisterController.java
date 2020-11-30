@@ -1,11 +1,8 @@
 package pl.edu.pjwstk.jaz.zad2;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 @RestController
 public class RegisterController {
 
@@ -22,8 +19,4 @@ public class RegisterController {
             System.out.println("Dodano");
     }
 
-    @ResponseBody
-    public ResponseTransfer responseAfterRegistration(){
-       return new ResponseTransfer("Thanks for registering");
-    }
 }

@@ -1,25 +1,26 @@
 package pl.edu.pjwstk.jaz.zad2;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class AuthenticationService {
 
-    UserSession userSession;
-    RegisterController registerController;
+    final UserSession userSession;
+    final RegisterController registerController;
+    final RegisteredUsers registeredUsers;
 
-    public AuthenticationService(UserSession userSession, RegisterController registerController) {
+
+    public AuthenticationService(UserSession userSession, RegisterController registerController, RegisteredUsers registeredUsers) {
         this.userSession = userSession;
         this.registerController = registerController;
+        this.registeredUsers = registeredUsers;
     }
 
     public boolean login(String username, String password){
         if(!username.isEmpty() && !password.isEmpty()){
             userSession.logIn();
+            SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(registeredUsers.getUserFromMap(username)));
             return registerController.registeredUsers.checkIfUserIsInDB(username) && registerController.registeredUsers.checkIfUsersPasswordIsCorrect(username, password);
         }
         return false;

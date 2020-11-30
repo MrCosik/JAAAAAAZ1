@@ -1,15 +1,20 @@
 package pl.edu.pjwstk.jaz.zad2;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
     private String username;
     private String password;
     private String firstName;
     private String lastName;
-    private Roles roles;
+//    private String roles;
+    private Set<String> roles = new HashSet<>();
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        roles.add("user");
     }
 
     public String getUsername() {
@@ -44,11 +49,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Roles getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Roles roles) {
-        this.roles = roles;
+    public void addRole(String role){
+        roles.add(role);
     }
 }

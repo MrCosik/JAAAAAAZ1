@@ -5,15 +5,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class RegisteredUsers {
-    private Map<String, User> registeredUsers;
+    private final Map<String, User> registeredUsers;
 
     public RegisteredUsers() {
         registeredUsers = new HashMap<>();
 
-        registeredUsers.put("admin", new User("admin","admin"));
+        User admin = new User("admin","admin");
+        admin.addRole("admin");
+        registeredUsers.put("admin",admin);
     }
 
     public void add(String username, String password){
@@ -27,4 +30,14 @@ public class RegisteredUsers {
     public boolean checkIfUsersPasswordIsCorrect(String username, String password){
         return registeredUsers.get(username).getPassword().equals(password);
     }
+
+    public Set<String> getUsersRole(String username){
+        return registeredUsers.get(username).getRoles();
+    }
+
+    public User getUserFromMap(String username){
+        return registeredUsers.get(username);
+    }
+
+
 }
