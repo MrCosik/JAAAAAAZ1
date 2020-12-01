@@ -1,5 +1,6 @@
 package pl.edu.pjwstk.jaz.zad1;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+
 @RestController
 public class ReadinessController {
     //@PersistenceContext
@@ -17,6 +19,7 @@ public class ReadinessController {
     public ReadinessController(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
 
     @PreAuthorize("hasAnyAuthority('view-readiness')")
     @Transactional

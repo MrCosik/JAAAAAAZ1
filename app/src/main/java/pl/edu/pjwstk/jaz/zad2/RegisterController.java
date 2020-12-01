@@ -14,9 +14,14 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterRequest registerRequest){
-            registeredUsers.add(registerRequest.getUsername(),registerRequest.getPassword());
+    public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException{
+        if(registeredUsers.checkIfUserIsInDB(registerRequest.getUsername())) {
+            registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
             System.out.println("Dodano");
+        }else {
+            throw new UserAlreadyExistsException();
+        }
+
     }
 
 }

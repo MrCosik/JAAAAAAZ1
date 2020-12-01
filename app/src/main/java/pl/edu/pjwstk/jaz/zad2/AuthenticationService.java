@@ -19,9 +19,11 @@ public class AuthenticationService {
 
     public boolean login(String username, String password){
         if(!username.isEmpty() && !password.isEmpty()){
-            userSession.logIn();
-            SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(registeredUsers.getUserFromMap(username)));
-            return registerController.registeredUsers.checkIfUserIsInDB(username) && registerController.registeredUsers.checkIfUsersPasswordIsCorrect(username, password);
+            if(registerController.registeredUsers.checkIfUserIsInDB(username) && registerController.registeredUsers.checkIfUsersPasswordIsCorrect(username, password)){
+                userSession.logIn();
+                SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(registeredUsers.getUserFromMap(username)));
+                return true;
+            }
         }
         return false;
     }
