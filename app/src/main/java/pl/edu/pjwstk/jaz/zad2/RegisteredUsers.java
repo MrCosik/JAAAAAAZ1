@@ -16,6 +16,7 @@ public class RegisteredUsers {
 
         User admin = new User("admin","admin");
         admin.addRole("admin");
+        admin.addRole("user");
         registeredUsers.put("admin",admin);
     }
 
