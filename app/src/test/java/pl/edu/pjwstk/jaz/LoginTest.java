@@ -1,23 +1,23 @@
 package pl.edu.pjwstk.jaz;
 
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-//import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectWriter;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.SerializationFeature;
+import pl.edu.pjwstk.jaz.zad2.AuthenticationService;
+import pl.edu.pjwstk.jaz.zad2.LoginRequest;
 
 import static io.restassured.RestAssured.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @IntegrationTest
+//@WebMvcTest
 public class LoginTest {
 
 
@@ -33,16 +34,47 @@ public class LoginTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+//    @MockBean
+//    private AuthenticationService authenticationService;
+
     @Before
     public void setUp() {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
-    public void loginAdmin() throws Exception {
+    public void loginToAdminAccountShouldRespondIn200() throws Exception {
+
+     // when(authenticationService.login("admin","admin")).thenReturn(true);
+
         mockMvc.perform(post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"username\": \"admin\",\"password\" : \"admin\"}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testTestu(){
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
+        given()
+                .cookies(response.getCookies())
+                .get("/api/edit")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void loginToNotExistingUserShouldReturnUnauthorized() throws Exception {
+
+        // when(authenticationService.login("admin","admin")).thenReturn(true);
+
+        mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\": \"user\",\"password\" : \"user\"}"))
+                .andExpect(status().isUnauthorized());
     }
 }
