@@ -53,19 +53,7 @@ public class LoginTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void testTestu(){
-        var response = given()
-                .body(new LoginRequest("admin", "admin"))
-                .contentType(ContentType.JSON)
-                .post("/api/login")
-                .thenReturn();
-        given()
-                .cookies(response.getCookies())
-                .get("/api/edit")
-                .then()
-                .statusCode(HttpStatus.OK.value());
-    }
+
 
     @Test
     public void loginToNotExistingUserShouldReturnUnauthorized() throws Exception {
