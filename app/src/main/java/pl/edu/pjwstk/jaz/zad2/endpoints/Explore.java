@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Explore {
 
 
-@PreAuthorize("hasAnyAuthority('user')")
+    @PreAuthorize("hasAnyAuthority('user')")
     @GetMapping("/explore")
     public void explore(){
 

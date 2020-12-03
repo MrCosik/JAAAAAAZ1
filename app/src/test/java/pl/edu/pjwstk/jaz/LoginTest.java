@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @IntegrationTest
-//@WebMvcTest
 public class LoginTest {
 
 
@@ -43,26 +42,36 @@ public class LoginTest {
     }
 
     @Test
-    public void loginToAdminAccountShouldRespondIn200() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_edit() throws Exception {
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
 
-     // when(authenticationService.login("admin","admin")).thenReturn(true);
-
-        mockMvc.perform(post("/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"admin\",\"password\" : \"admin\"}"))
-                .andExpect(status().isOk());
+        given()
+                .cookies(response.getCookies())
+                .get("/api/edit")
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
-
-
 
     @Test
-    public void loginToNotExistingUserShouldReturnUnauthorized() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_explore() throws Exception {
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
 
-        // when(authenticationService.login("admin","admin")).thenReturn(true);
-
-        mockMvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"user\",\"password\" : \"user\"}"))
-                .andExpect(status().isUnauthorized());
+        given()
+                .cookies(response.getCookies())
+                .get("/api/explore")
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
+
+
+
+
 }
