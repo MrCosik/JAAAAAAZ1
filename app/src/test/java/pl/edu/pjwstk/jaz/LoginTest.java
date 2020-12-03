@@ -3,6 +3,7 @@ package pl.edu.pjwstk.jaz;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import pl.edu.pjwstk.jaz.zad2.AuthenticationService;
 import pl.edu.pjwstk.jaz.zad2.LoginRequest;
+import pl.edu.pjwstk.jaz.zad2.RegisterRequest;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.when;
@@ -25,44 +27,77 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @IntegrationTest
-//@WebMvcTest
 public class LoginTest {
 
 
-    private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+//    private MockMvc mockMvc;
+//
+//    @Autowired
+//    private WebApplicationContext webApplicationContext;
 
 //    @MockBean
 //    private AuthenticationService authenticationService;
+//
+//    @Before
+//    public void setUp() {
+//        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+//    }
 
-    @Before
-    public void setUp() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+    @BeforeClass
+    public static void register_user(){
+        given()
+                .body(new RegisterRequest("user","user"))
+                .contentType(ContentType.JSON)
+                .post("/api/register");
     }
 
     @Test
-    public void loginToAdminAccountShouldRespondIn200() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_edit() throws Exception {
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
 
-     // when(authenticationService.login("admin","admin")).thenReturn(true);
-
-        mockMvc.perform(post("/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"admin\",\"password\" : \"admin\"}"))
-                .andExpect(status().isOk());
+        given()
+                .cookies(response.getCookies())
+                .get("/api/edit")
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
-
-
 
     @Test
-    public void loginToNotExistingUserShouldReturnUnauthorized() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_explore() throws Exception {
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
 
-        // when(authenticationService.login("admin","admin")).thenReturn(true);
-
-        mockMvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"user\",\"password\" : \"user\"}"))
-                .andExpect(status().isUnauthorized());
+        given()
+                .cookies(response.getCookies())
+                .get("/api/explore")
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
+
+    @Test
+    public void user_should_access_explore(){
+        var response = given()
+                .body(new LoginRequest("user", "user"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
+
+        given()
+                .cookies(response.getCookies())
+                .get("/api/explore")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+
+
+
+
 }

@@ -3,6 +3,7 @@ package pl.edu.pjwstk.jaz.zad2;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.pjwstk.jaz.zad2.exception.UnauthorizedException;
 
 @RestController
 public class LoginController {

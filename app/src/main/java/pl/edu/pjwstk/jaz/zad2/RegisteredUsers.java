@@ -13,7 +13,6 @@ public class RegisteredUsers {
 
     public RegisteredUsers() {
         registeredUsers = new HashMap<>();
-
         User admin = new User("admin","admin");
         admin.addRole("admin");
         admin.addRole("user");
@@ -40,5 +39,7 @@ public class RegisteredUsers {
         return registeredUsers.get(username);
     }
 
-
+    public Map<String, User> getRegisteredUsers() {
+        return registeredUsers;
+    }
 }
