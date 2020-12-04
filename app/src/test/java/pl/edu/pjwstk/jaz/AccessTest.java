@@ -27,21 +27,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @IntegrationTest
-public class LoginTest {
-
-
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private WebApplicationContext webApplicationContext;
-
-//    @MockBean
-//    private AuthenticationService authenticationService;
-//
-//    @Before
-//    public void setUp() {
-//        this.mockMvc = webAppContextSetup(webApplicationContext).build();
-//    }
+public class AccessTest {
 
     @BeforeClass
     public static void register_user(){
@@ -52,7 +38,7 @@ public class LoginTest {
     }
 
     @Test
-    public void logged_admin_should_be_allowed_to_enter_edit() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_edit(){
         var response = given()
                 .body(new LoginRequest("admin", "admin"))
                 .contentType(ContentType.JSON)
@@ -67,7 +53,7 @@ public class LoginTest {
     }
 
     @Test
-    public void logged_admin_should_be_allowed_to_enter_explore() throws Exception {
+    public void logged_admin_should_be_allowed_to_enter_explore(){
         var response = given()
                 .body(new LoginRequest("admin", "admin"))
                 .contentType(ContentType.JSON)
@@ -95,6 +81,22 @@ public class LoginTest {
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }
+
+    @Test
+    public void user_should_not_access_edit(){
+        var response = given()
+                .body(new LoginRequest("user", "user"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
+
+        given()
+                .cookies(response.getCookies())
+                .get("/api/edit")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
 
 
 

@@ -1,5 +1,7 @@
 package pl.edu.pjwstk.jaz;
 
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,6 +18,7 @@ import pl.edu.pjwstk.jaz.zad2.LoginRequest;
 import pl.edu.pjwstk.jaz.zad2.RegisterRequest;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -23,31 +26,29 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @IntegrationTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RegisterTest {
 
 
-    private MockMvc mockMvc;
+    @Test
+    public void register_user_should_respond_with_200(){
+        var response = given()
+                .body(new RegisterRequest("user", "user"))
+                .contentType(ContentType.JSON)
+                .post("/api/register")
+                .thenReturn();
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Before
-    public void setUp() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        assertEquals(HttpStatus.SC_OK,response.getStatusCode());
     }
 
     @Test
-    public void registerUserAndLoginShouldRespondWith200() throws Exception {
-        mockMvc.perform(post("/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"username\": \"user\",\"password\" : \"user\"}"))
-                .andExpect(status().isOk());
+    public void register_already_registered_user_should_return_400(){
+        var response = given()
+                .body(new RegisterRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/register")
+                .thenReturn();
 
-        mockMvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"user\",\"password\" : \"user\"}"))
-                .andExpect(status().isOk());
+        assertEquals(HttpStatus.SC_BAD_REQUEST,response.getStatusCode());
     }
 
 }
