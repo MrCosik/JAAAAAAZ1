@@ -29,7 +29,7 @@ public class AuthenticationService {
             return false;
         }
         } else{
-            throw new AlreadyLoggedException("USer already logged");
+            throw new AlreadyLoggedException("User already logged");
         }
         return false;
     }
