@@ -1,9 +1,7 @@
-DROP Table test1;
+DROP TABLE test1;
 
-CREATE TABLE users{
-    id INT,
-    username VARCHAR(255),
-    password VARCHAR(255),
-    firstName VARCHAR(255),
-    lastName VARCHAR(255)
-};
+CREATE users(
+id BIGSERIAL NOT NULL PRIMARY KEY ,
+username VARCHAR not null,
+password VARCHAR not null
+);

@@ -1,14 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: 20201012_init.sql
+      id: 20201012_init
       author: Jakub Cirocki
       sqlFile:
         relativeToChangelogFile: true
         stripComments: true
         splitStatements: false
         path: db.changelog/20201012_init.sql
+
   - changeSet:
-      id: 20201201_add_users.sql
+      id: 20201201_add_users
       author: Jakub Cirocki
       sqlFile:
         relativeToChangelogFile: true

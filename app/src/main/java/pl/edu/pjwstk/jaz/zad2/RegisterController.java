@@ -10,17 +10,32 @@ import java.util.List;
 @RestController
 public class RegisterController {
 
-    RegisteredUsers registeredUsers;
+    private final RegisteredUsers registeredUsers;
+    private final UserService userService;
 
     @Autowired
-    public RegisterController(RegisteredUsers registeredUsers) {
+    public RegisterController(RegisteredUsers registeredUsers, UserService userService) {
         this.registeredUsers = registeredUsers;
+        this.userService = userService;
     }
+
+//    @PostMapping("/register")
+//    public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException {
+//        if(!registeredUsers.checkIfUserIsInDB(registerRequest.getUsername())) {
+//            registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
+//            System.out.println("Dodano");
+//        }else {
+//            throw new UserAlreadyExistsException("User already exists");
+//        }
+//
+//    }
 
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException {
-        if(!registeredUsers.checkIfUserIsInDB(registerRequest.getUsername())) {
-            registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
+        if(userService.findUserByUsername(registerRequest.getUsername()) != null) {
+            //registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
+            userService.saveUser(registerRequest.getUsername()
+                                ,registerRequest.getPassword());
             System.out.println("Dodano");
         }else {
             throw new UserAlreadyExistsException("User already exists");
