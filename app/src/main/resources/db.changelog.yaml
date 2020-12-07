@@ -16,3 +16,12 @@ databaseChangeLog:
         stripComments: true
         splitStatements: false
         path: db.changelog/20201201_add_users.sql
+
+  - changeSet:
+      id: 20201207_expand_users_table
+      author: Jakub Cirocki
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20201207_expand_users_table.sql

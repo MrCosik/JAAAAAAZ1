@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.zad2;
+package pl.edu.pjwstk.jaz.zad2.user;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.jaz.readiness.UserEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
+@Transactional
 @Service
 public class UserService {
 
@@ -26,9 +29,15 @@ public class UserService {
     }
 
     public UserEntity findUserByUsername(String username){
-        return em.createQuery("select ue from UserEntity ue where ue.username = :username", UserEntity.class)
-                .setParameter("username", username)
-                .getSingleResult();
+
+        try {
+            return em.createQuery("select ue from UserEntity ue where ue.username = :username", UserEntity.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        }catch (NoResultException e){
+            e.getMessage();
+        }
+        return null;
     }
 
 

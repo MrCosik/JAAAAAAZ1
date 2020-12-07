@@ -1,7 +1,10 @@
-package pl.edu.pjwstk.jaz.zad2;
+package pl.edu.pjwstk.jaz.zad2.controler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pjwstk.jaz.zad2.request.RegisterRequest;
+import pl.edu.pjwstk.jaz.zad2.RegisteredUsers;
+import pl.edu.pjwstk.jaz.zad2.user.UserService;
 import pl.edu.pjwstk.jaz.zad2.exception.UserAlreadyExistsException;
 
 import java.util.Arrays;
@@ -32,7 +35,7 @@ public class RegisterController {
 
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException {
-        if(userService.findUserByUsername(registerRequest.getUsername()) != null) {
+        if(userService.findUserByUsername(registerRequest.getUsername()) == null) {
             //registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
             userService.saveUser(registerRequest.getUsername()
                                 ,registerRequest.getPassword());

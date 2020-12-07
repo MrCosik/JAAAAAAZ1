@@ -2,7 +2,10 @@ package pl.edu.pjwstk.jaz.zad2;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import pl.edu.pjwstk.jaz.zad2.controler.RegisterController;
 import pl.edu.pjwstk.jaz.zad2.exception.AlreadyLoggedException;
+import pl.edu.pjwstk.jaz.zad2.user.UserService;
+import pl.edu.pjwstk.jaz.zad2.user.UserSession;
 
 @Component
 public class AuthenticationService {

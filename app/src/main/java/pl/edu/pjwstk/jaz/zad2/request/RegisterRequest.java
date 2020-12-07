@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.zad2;
+package pl.edu.pjwstk.jaz.zad2.request;
 
 import org.springframework.stereotype.Component;
 
