@@ -43,13 +43,11 @@ public class AuthenticationService {
         var foundUser = userService.findUserByUsername(username);
 
         if (!userSession.isLoggedIn()) {
-            if (foundUser != null) {
-                if (foundUser.getUsername().equals(username) && foundUser.getPassword().equals(password)) {
+                if (foundUser.getUsername().equals(username) && userService.getPasswordEncoder().matches(password, foundUser.getPassword())) {
                     userSession.logIn();
-                    SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(registeredUsers.getUserFromMap(username)));
+                    //SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(foundUser));
                     return true;
                 }
-            }
         } else {
             throw new AlreadyLoggedException("User already logged");
         }

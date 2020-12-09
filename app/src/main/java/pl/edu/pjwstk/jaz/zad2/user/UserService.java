@@ -20,10 +20,19 @@ public class UserService {
         this.em = em;
     }
 
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
+    }
+
     public void saveUser(String username, String password){
         var userEntity = new UserEntity();
         userEntity.setUsername(username);
         userEntity.setPassword(passwordEncoder.encode(password));
+        if(username.equals("admin")){
+            userEntity.setRole("admin");
+        }else{
+            userEntity.setRole("user");
+        }
         em.persist(userEntity);
 
     }
@@ -35,10 +44,8 @@ public class UserService {
                     .setParameter("username", username)
                     .getSingleResult();
         }catch (NoResultException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
         return null;
     }
-
-
 }

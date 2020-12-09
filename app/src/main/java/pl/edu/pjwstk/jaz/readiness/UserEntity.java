@@ -2,6 +2,8 @@ package pl.edu.pjwstk.jaz.readiness;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -19,12 +21,26 @@ public class UserEntity {
     private String firstName;
     @Column(name = "lastname")
     private String lastName;
+    @Column(name = "role")
+    private String role;
+
+//    @ElementCollection
+//    @CollectionTable(name = "roles",joinColumns = @JoinColumn(name = "users_id"))
+//    @Column(name = "role")
+//    private final Set<String> roles = new HashSet<>();
+//
+//
+//
+//    public UserEntity() {
+//    }
+//
+//    {
+//        roles.add("admin");
+//        roles.add("user");
+//    }
 
     public Long getId() {
         return id;
-    }
-
-    public UserEntity() {
     }
 
     public String getUsername() {
@@ -57,5 +73,13 @@ public class UserEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
