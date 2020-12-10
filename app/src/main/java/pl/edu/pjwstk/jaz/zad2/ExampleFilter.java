@@ -1,17 +1,20 @@
 package pl.edu.pjwstk.jaz.zad2;
 
 import org.springframework.http.HttpStatus;
+import pl.edu.pjwstk.jaz.zad2.user.UserSession;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ExampleFilter extends HttpFilter {
 
     private final UserSession userSession;
+
+
 
 
     public ExampleFilter(UserSession userSession) {

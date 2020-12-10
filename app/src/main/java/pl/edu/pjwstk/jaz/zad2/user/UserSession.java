@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.zad2;
+package pl.edu.pjwstk.jaz.zad2.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

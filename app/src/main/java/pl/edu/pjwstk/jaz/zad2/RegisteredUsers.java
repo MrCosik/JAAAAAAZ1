@@ -1,7 +1,7 @@
 package pl.edu.pjwstk.jaz.zad2;
 
-import liquibase.pro.packaged.U;
 import org.springframework.stereotype.Component;
+import pl.edu.pjwstk.jaz.zad2.user.User;
 
 import java.util.HashMap;
 import java.util.Map;

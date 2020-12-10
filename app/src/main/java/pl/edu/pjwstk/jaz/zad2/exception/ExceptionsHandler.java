@@ -13,7 +13,7 @@ public class ExceptionsHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(value = {UserAlreadyExistsException.class})
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException e){
         return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
     }

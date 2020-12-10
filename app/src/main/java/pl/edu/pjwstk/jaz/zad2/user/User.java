@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.zad2;
+package pl.edu.pjwstk.jaz.zad2.user;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +15,9 @@ public class User {
         this.username = username;
         this.password = password;
         roles.add("user");
+    }
+
+    public User() {
     }
 
     public String getUsername() {
