@@ -25,6 +25,14 @@ public class AccessTest {
                 .post("/api/register");
     }
 
+    @BeforeClass
+    public static void register_admin(){
+        given()
+                .body(new RegisterRequest("admin","admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/register");
+    }
+
     @Test
     public void logged_admin_should_be_allowed_to_enter_edit(){
         var response = given()
@@ -81,6 +89,36 @@ public class AccessTest {
         given()
                 .cookies(response.getCookies())
                 .get("/api/edit")
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void auth0_admin_should_have_access_to_is_ready(){
+        var response = given()
+                .body(new LoginRequest("admin", "admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
+
+        given()
+                .cookies(response.getCookies())
+                .get("/api/auth0/is-ready")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void auth0_user_should_not_have_access_to_is_ready(){
+        var response = given()
+                .body(new LoginRequest("user", "user"))
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .thenReturn();
+
+        given()
+                .cookies(response.getCookies())
+                .get("/api/auth0/is-ready")
                 .then()
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }

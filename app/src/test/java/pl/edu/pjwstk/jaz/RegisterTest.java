@@ -2,6 +2,7 @@ package pl.edu.pjwstk.jaz;
 
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,6 +16,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @IntegrationTest
 public class RegisterTest {
+
+    @BeforeClass
+    public static void register_admin(){
+        given()
+                .body(new RegisterRequest("admin","admin"))
+                .contentType(ContentType.JSON)
+                .post("/api/register");
+    }
 
 
     @Test

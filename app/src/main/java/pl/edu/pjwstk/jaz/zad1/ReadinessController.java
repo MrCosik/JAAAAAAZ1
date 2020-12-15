@@ -21,7 +21,7 @@ public class ReadinessController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('view-readiness')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     @Transactional
     @GetMapping("auth0/is-ready")
     public void readinessTest() {

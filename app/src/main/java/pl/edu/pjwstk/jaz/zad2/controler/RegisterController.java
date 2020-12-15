@@ -22,16 +22,6 @@ public class RegisterController {
         this.userService = userService;
     }
 
-//    @PostMapping("/register")
-//    public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException {
-//        if(!registeredUsers.checkIfUserIsInDB(registerRequest.getUsername())) {
-//            registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
-//            System.out.println("Dodano");
-//        }else {
-//            throw new UserAlreadyExistsException("User already exists");
-//        }
-//
-//    }
 
     @PostMapping("/register")
     public void register(@RequestBody RegisterRequest registerRequest) throws UserAlreadyExistsException {

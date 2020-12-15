@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -11,7 +13,9 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@SequenceGenerator(name="seq-gen", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
     @Column(name = "username")
     private String username;
@@ -21,23 +25,18 @@ public class UserEntity {
     private String firstName;
     @Column(name = "lastname")
     private String lastName;
-    @Column(name = "role")
-    private String role;
 
-//    @ElementCollection
-//    @CollectionTable(name = "roles",joinColumns = @JoinColumn(name = "users_id"))
-//    @Column(name = "role")
-//    private final Set<String> roles = new HashSet<>();
-//
-//
-//
-//    public UserEntity() {
-//    }
-//
-//    {
-//        roles.add("admin");
-//        roles.add("user");
-//    }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "users_id", referencedColumnName = "id")
+    Set<Roles> roles = new HashSet<>();
+
+    public UserEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public UserEntity() {}
+
 
     public Long getId() {
         return id;
@@ -75,11 +74,15 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public String getRole() {
-        return role;
+    public void addRole(String role){
+        roles.add(new Roles(role));
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public Set<String> getRoles() {
+        Set<String> roleNames = new HashSet<>();
+        for(Roles role : roles){
+            roleNames.add(role.getRole());
+        }
+        return roleNames;
     }
 }
