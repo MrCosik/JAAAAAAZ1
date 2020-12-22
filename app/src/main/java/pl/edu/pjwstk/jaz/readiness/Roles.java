@@ -15,16 +15,12 @@ public class Roles {
     @Column(name = "role")
     private String role;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "users_id")
-    //private UserEntity userEntity;
-
     public Roles() {}
-    static {
-        new Roles("admin");
-        new Roles("user");
-
-    }
+//    static {
+//        new Roles("admin");
+//        new Roles("user");
+//
+//    }
 
     public Roles(String role) {
         this.role = role;

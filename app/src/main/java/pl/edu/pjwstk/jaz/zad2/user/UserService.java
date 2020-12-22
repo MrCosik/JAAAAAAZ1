@@ -51,4 +51,8 @@ public class UserService {
         }
         return null;
     }
+
+    public boolean passwordEncoder(String password, UserEntity foundUser){
+        return getPasswordEncoder().matches(password, foundUser.getPassword());
+    }
 }

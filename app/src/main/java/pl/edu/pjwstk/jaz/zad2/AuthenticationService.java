@@ -29,7 +29,7 @@ public class AuthenticationService {
 
         if (!userSession.isLoggedIn()) {
             if(foundUser != null) {
-                if (foundUser.getUsername().equals(username) && userService.getPasswordEncoder().matches(password, foundUser.getPassword())) {
+                if (foundUser.getUsername().equals(username) &&  userService.passwordEncoder(password,foundUser)) {
                     userSession.logIn();
                     SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(foundUser));
                     return true;
@@ -42,4 +42,6 @@ public class AuthenticationService {
         }
         return false;
     }
+
+
 }

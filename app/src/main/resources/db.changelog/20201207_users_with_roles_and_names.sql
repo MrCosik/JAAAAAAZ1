@@ -1,4 +1,4 @@
---DROP TABLE users;
+DROP TABLE users;
 
 CREATE TABLE users(
     id BIGSERIAL NOT NULL PRIMARY KEY,
