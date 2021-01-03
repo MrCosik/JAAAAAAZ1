@@ -25,3 +25,12 @@ databaseChangeLog:
         stripComments: true
         splitStatements: false
         path: db.changelog/20201207_users_with_roles_and_names.sql
+
+  - changeSet:
+      id: 20210103_auctions_with_params_and_photos
+      author: Jakub Cirocki
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20210103_auctions_with_params_and_photos.sql
