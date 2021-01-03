@@ -15,7 +15,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     //@SequenceGenerator(name="seq-gen", allocationSize = 1)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
     @Column(name = "username")
     private String username;
@@ -27,7 +27,7 @@ public class UserEntity {
     private String lastName;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_id", referencedColumnName = "id")
+    @JoinColumn(name = "users_fk", referencedColumnName = "user_id")
     Set<Roles> roles = new HashSet<>();
 
     public UserEntity(String username, String password) {
