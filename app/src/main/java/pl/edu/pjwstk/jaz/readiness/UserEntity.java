@@ -1,21 +1,17 @@
 package pl.edu.pjwstk.jaz.readiness;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "app_user", schema = "public")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     //@SequenceGenerator(name="seq-gen", allocationSize = 1)
-    @Column(name = "user_id")
+    @Column(name = "id")
     private Long id;
     @Column(name = "username")
     private String username;
@@ -27,7 +23,7 @@ public class UserEntity {
     private String lastName;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_fk", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_fk", referencedColumnName = "user_id")
     Set<Roles> roles = new HashSet<>();
 
     public UserEntity(String username, String password) {

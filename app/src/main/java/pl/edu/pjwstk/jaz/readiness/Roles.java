@@ -3,16 +3,16 @@ package pl.edu.pjwstk.jaz.readiness;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Roles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    @Column(name = "id")
     private Long id_roles;
-    @Column(name = "users_fk")
+    @Column(name = "user_id")
     private Long user_id;
-    @Column(name = "role")
+    @Column(name = "title")
     private String role;
 
     public Roles() {}

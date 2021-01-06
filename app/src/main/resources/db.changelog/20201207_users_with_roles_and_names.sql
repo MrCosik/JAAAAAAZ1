@@ -1,18 +1,18 @@
-DROP TABLE users;
+DROP TABLE app_user;
 
-CREATE TABLE users(
-    user_id BIGSERIAL NOT NULL PRIMARY KEY,
+CREATE TABLE app_user(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
     username VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
-    firstName VARCHAR,
-    lastName VARCHAR
+    firstname VARCHAR,
+    lastname VARCHAR
 );
 
-CREATE TABLE roles(
-    role_id BIGSERIAL NOT NULL PRIMARY KEY,
-    users_fk INT,
-    role VARCHAR NOT NULL,
-    CONSTRAINT users_fk FOREIGN KEY(users_fk)
-        REFERENCES users(user_id)
+CREATE TABLE role(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    user_id INT,
+    CONSTRAINT user_id FOREIGN KEY(user_id)
+        REFERENCES app_user(id)
     ON UPDATE CASCADE ON DELETE CASCADE
 );
