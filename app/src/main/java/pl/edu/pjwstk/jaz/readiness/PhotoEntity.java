@@ -2,7 +2,8 @@ package pl.edu.pjwstk.jaz.readiness;
 
 import javax.persistence.*;
 
-@Entity(name = "photo")
+@Entity
+@Table(name = "photo")
 public class PhotoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -10,10 +11,10 @@ public class PhotoEntity {
     private Long id;
     @Column(name = "title")
     private String name;
-    @Column(name = "size")
-    private float size;
     @Column(name = "auction_id")
-    private int auction_fk;
+    private int auctionId;
+    @Column(name = "position")
+    private Long position;
 
     public PhotoEntity() {
     }
@@ -30,19 +31,19 @@ public class PhotoEntity {
         this.name = name;
     }
 
-    public float getSize() {
-        return size;
+    public int getAuctionId() {
+        return auctionId;
     }
 
-    public void setSize(float size) {
-        this.size = size;
+    public void setAuctionId(int auctionId) {
+        this.auctionId = auctionId;
     }
 
-    public int getAuction_fk() {
-        return auction_fk;
+    public Long getPosition() {
+        return position;
     }
 
-    public void setAuction_fk(int auction_fk) {
-        this.auction_fk = auction_fk;
+    public void setPosition(Long position) {
+        this.position = position;
     }
 }

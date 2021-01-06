@@ -2,7 +2,8 @@ package pl.edu.pjwstk.jaz.readiness;
 
 import javax.persistence.*;
 
-@Entity(name = "parameter")
+@Entity
+@Table(name = "parameter")
 public class ParameterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

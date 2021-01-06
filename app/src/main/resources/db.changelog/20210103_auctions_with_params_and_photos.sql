@@ -11,7 +11,7 @@ CREATE TABLE auction (
 CREATE TABLE photo(
     id BIGSERIAL NOT NULL PRIMARY KEY,
     title VARCHAR,
-    size FLOAT,
+    position INT,
     auction_id INT,
     CONSTRAINT auction_id FOREIGN KEY(auction_id)
         REFERENCES auction(id)
@@ -43,8 +43,8 @@ CREATE TABLE auction_parameter(
     CONSTRAINT auction_parameter_pk PRIMARY KEY(auction_id,parameter_id)
 );
 
-CREATE TABLE auction_section(
+CREATE TABLE auction_category(
     auction_id INT REFERENCES auction(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    section_id INT REFERENCES parameter(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT auction_section_pk PRIMARY KEY(auction_id,section_id)
+    category_id INT REFERENCES parameter(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT auction_category_pk PRIMARY KEY(auction_id,category_id)
 );

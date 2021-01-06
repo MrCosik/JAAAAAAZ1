@@ -1,8 +1,10 @@
 package pl.edu.pjwstk.jaz.readiness;
 
 import javax.persistence.*;
+import java.util.*;
 
-@Entity(name = "auction")
+@Entity
+@Table(name = "auction")
 public class AuctionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +16,27 @@ public class AuctionEntity {
     private String description;
     @Column(name = "created_by")
     private Long creatorsId;
+
+
+    @Transient
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "auction_id", referencedColumnName = "id")
+    private Set<PhotoEntity> photos = new HashSet();
+
+    @ManyToMany
+    @JoinTable(
+            name = "auction_category",
+            joinColumns = @JoinColumn(name = "auction_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    Set<CategoryEntity> containedInCategories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "auction_parameter",
+            joinColumns = @JoinColumn(name = "auction_id"),
+            inverseJoinColumns = @JoinColumn(name = "parameter_id")
+    )
+    Set<ParameterEntity> parameters = new HashSet<>();
 
     public AuctionEntity() {
     }
