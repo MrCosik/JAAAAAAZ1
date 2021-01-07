@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pjwstk.jaz.zad2.request.RegisterRequest;
 import pl.edu.pjwstk.jaz.zad2.RegisteredUsers;
-import pl.edu.pjwstk.jaz.zad2.user.UserService;
+import pl.edu.pjwstk.jaz.zad2.services.UserService;
 import pl.edu.pjwstk.jaz.zad2.exception.UserAlreadyExistsException;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class RegisterController {
             //registeredUsers.add(registerRequest.getUsername(), registerRequest.getPassword());
             userService.saveUser(registerRequest.getUsername()
                                 ,registerRequest.getPassword());
-            System.out.println("Dodano");
+            System.out.println("New user added");
         }else {
             throw new UserAlreadyExistsException("User already exists");
         }

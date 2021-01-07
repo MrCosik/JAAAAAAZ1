@@ -3,8 +3,7 @@ package pl.edu.pjwstk.jaz.zad2;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import pl.edu.pjwstk.jaz.readiness.UserEntity;
-import pl.edu.pjwstk.jaz.zad2.user.User;
+import pl.edu.pjwstk.jaz.zad2.entities.UserEntity;
 
 import java.util.Collection;
 import java.util.Set;

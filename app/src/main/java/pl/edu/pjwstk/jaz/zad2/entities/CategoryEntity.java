@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.readiness;
+package pl.edu.pjwstk.jaz.zad2.entities;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -24,7 +24,9 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
-
+    public CategoryEntity(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return Id;
@@ -45,4 +47,6 @@ public class CategoryEntity {
     public void setSectionId(int sectionId) {
         this.sectionId = sectionId;
     }
+
+
 }

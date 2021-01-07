@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.readiness;
+package pl.edu.pjwstk.jaz.zad2.entities;
 
 import javax.persistence.*;
 

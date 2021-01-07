@@ -1,10 +1,9 @@
-package pl.edu.pjwstk.jaz.zad2.user;
+package pl.edu.pjwstk.jaz.zad2.services;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.edu.pjwstk.jaz.readiness.Roles;
-import pl.edu.pjwstk.jaz.readiness.UserEntity;
+import pl.edu.pjwstk.jaz.zad2.entities.UserEntity;
 
 
 import javax.persistence.EntityManager;
@@ -27,32 +26,30 @@ public class UserService {
         return passwordEncoder;
     }
 
-    public void saveUser(String username, String password){
+    public void saveUser(String username, String password) {
         var userEntity = new UserEntity();
 
         userEntity.setUsername(username);
         userEntity.setPassword(passwordEncoder.encode(password));
-        if(username.equals("admin")){
+        if (username.equals("admin")) {
             userEntity.addRole("admin");
         }
         userEntity.addRole("user");
         em.persist(userEntity);
-
     }
 
-    public UserEntity findUserByUsername(String username){
-
+    public UserEntity findUserByUsername(String username) {
         try {
             return em.createQuery("select ue from UserEntity ue where ue.username = :username", UserEntity.class)
                     .setParameter("username", username)
                     .getSingleResult();
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             System.out.println("This user is not in database");
         }
         return null;
     }
 
-    public boolean passwordEncoder(String password, UserEntity foundUser){
+    public boolean passwordEncoder(String password, UserEntity foundUser) {
         return getPasswordEncoder().matches(password, foundUser.getPassword());
     }
 }

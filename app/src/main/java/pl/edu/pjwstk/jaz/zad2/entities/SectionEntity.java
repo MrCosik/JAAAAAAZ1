@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.jaz.readiness;
+package pl.edu.pjwstk.jaz.zad2.entities;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -32,5 +32,9 @@ public class SectionEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addCategory(String categoryTitle){
+        containsCategories.add(new CategoryEntity(categoryTitle));
     }
 }
