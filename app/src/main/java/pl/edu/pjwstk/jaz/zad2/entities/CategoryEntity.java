@@ -10,11 +10,12 @@ public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long Id;
     @Column(name = "title")
     private String title;
     @Column(name = "section_id")
-    private int sectionId;
+    private Long sectionId;
 
     @ManyToMany
     Set<AuctionEntity> auctions = new HashSet<>();
@@ -26,6 +27,11 @@ public class CategoryEntity {
 
     public CategoryEntity(String title) {
         this.title = title;
+    }
+
+    public CategoryEntity(String title, Long sectionId) {
+        this.title = title;
+        this.sectionId = sectionId;
     }
 
     public Long getId() {
@@ -40,11 +46,11 @@ public class CategoryEntity {
         this.title = title;
     }
 
-    public int getSectionId() {
+    public Long getSectionId() {
         return sectionId;
     }
 
-    public void setSectionId(int sectionId) {
+    public void setSectionId(Long sectionId) {
         this.sectionId = sectionId;
     }
 

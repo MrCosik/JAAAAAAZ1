@@ -10,11 +10,12 @@ public class SectionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "title")
     private String title;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "section_id", referencedColumnName = "id")
     Set<CategoryEntity> containsCategories = new HashSet<>();
 
@@ -35,6 +36,6 @@ public class SectionEntity {
     }
 
     public void addCategory(String categoryTitle){
-        containsCategories.add(new CategoryEntity(categoryTitle));
+        containsCategories.add(new CategoryEntity(categoryTitle, this.id));
     }
 }

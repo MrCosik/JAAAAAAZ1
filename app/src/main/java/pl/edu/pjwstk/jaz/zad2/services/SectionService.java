@@ -21,6 +21,7 @@ public class SectionService {
         var sectionEntity = new SectionEntity();
         sectionEntity.setTitle(sectionRequest.getTitle());
         addCategoriesFromArray(sectionRequest, sectionEntity);
+
         em.persist(sectionEntity);
     }
 
