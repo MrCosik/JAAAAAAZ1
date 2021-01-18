@@ -2,18 +2,25 @@ package pl.edu.pjwstk.jaz.zad2.request;
 
 import pl.edu.pjwstk.jaz.zad2.entities.CategoryEntity;
 
+import java.util.List;
+
 public class AuctionRequest {
 
     private String title;
     private String description;
-    private CategoryEntity categoryEntity;
+    private List<String> categoryEntity;
+    private List<String> photos;
 
-    public AuctionRequest(String title, String description, CategoryEntity...categoryEntity) {
+
+    public AuctionRequest(String title, String description, List<String> categoryEntity, List<String> photos) {
         this.title = title;
         this.description = description;
+        this.categoryEntity = categoryEntity;
+        this.photos = photos;
     }
 
-
+    public AuctionRequest() {
+    }
 
     public String getTitle() {
         return title;
@@ -31,11 +38,11 @@ public class AuctionRequest {
         this.description = description;
     }
 
-    public CategoryEntity getCategoryEntity() {
+    public List<String> getCategoryEntity() {
         return categoryEntity;
     }
 
-    public void setCategoryEntity(CategoryEntity categoryEntity) {
-        this.categoryEntity = categoryEntity;
+    public List<String> getPhotos() {
+        return photos;
     }
 }

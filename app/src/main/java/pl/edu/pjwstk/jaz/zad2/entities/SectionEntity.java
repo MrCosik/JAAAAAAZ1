@@ -35,7 +35,16 @@ public class SectionEntity {
         this.title = title;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void addCategory(String categoryTitle){
         containsCategories.add(new CategoryEntity(categoryTitle, this.id));
     }
+
+    public void clearSet(){
+        containsCategories.clear();
+    }
+
 }

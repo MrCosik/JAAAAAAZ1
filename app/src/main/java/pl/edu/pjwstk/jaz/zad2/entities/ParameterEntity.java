@@ -1,6 +1,7 @@
 package pl.edu.pjwstk.jaz.zad2.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "parameter")
@@ -9,8 +10,15 @@ public class ParameterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "title")
-    private String name;
+    @Column(name = "value")
+    private String value;
+
+    @OneToMany(
+            mappedBy = "parameterEntity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<AuctionParameterEntity> parameterValue;
 
     public ParameterEntity() {
     }
@@ -19,11 +27,23 @@ public class ParameterEntity {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Set<AuctionParameterEntity> getParameterValue() {
+        return parameterValue;
+    }
+
+    public void setParameterValue(Set<AuctionParameterEntity> parameterValue) {
+        this.parameterValue = parameterValue;
     }
 }

@@ -10,33 +10,33 @@ public class AuctionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "category_id")
+    private Long categoryId;
+    @Column(name = "created_by")
+    private Long creatorsId;
     @Column(name = "title")
     private String title;
     @Column(name = "description")
     private String description;
-    @Column(name = "created_by")
-    private Long creatorsId;
+    @Column(name = "price")
+    private int price;
 
 
     @Transient
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "auction_id", referencedColumnName = "id")
-    private Set<PhotoEntity> photos = new HashSet();
+    private final Set<PhotoEntity> photos = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "auction_category",
-            joinColumns = @JoinColumn(name = "auction_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    Set<CategoryEntity> containedInCategories = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "auction_parameter",
-            joinColumns = @JoinColumn(name = "auction_id"),
-            inverseJoinColumns = @JoinColumn(name = "parameter_id")
+    @OneToMany(
+            mappedBy = "auctionEntity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    Set<ParameterEntity> parameters = new HashSet<>();
+    private Set<AuctionParameterEntity> parameterValue;
+
+
+
+
 
     public AuctionEntity() {
     }
@@ -63,5 +63,29 @@ public class AuctionEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+//    public void addCategory(String categoryName) {
+//        containedInCategories.add(new CategoryEntity(categoryName));
+//    }
+
+    public void addPhoto(String photoTitle, int photoPosition) {
+        photos.add(new PhotoEntity(photoTitle, photoPosition));
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Long getCreatorsId() {
+        return creatorsId;
+    }
+
+    public void setCreatorsId(Long creatorsId) {
+        this.creatorsId = creatorsId;
     }
 }

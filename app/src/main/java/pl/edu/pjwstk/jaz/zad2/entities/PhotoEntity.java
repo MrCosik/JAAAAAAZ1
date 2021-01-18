@@ -9,26 +9,31 @@ public class PhotoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "title")
-    private String name;
     @Column(name = "auction_id")
     private int auctionId;
+    @Column(name = "link")
+    private String link;
     @Column(name = "position")
-    private Long position;
+    private int position;
 
     public PhotoEntity() {
+    }
+
+    public PhotoEntity(String link, int position){
+        this.link = link;
+        this.position = position;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getLink() {
+        return link;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public int getAuctionId() {
@@ -39,11 +44,11 @@ public class PhotoEntity {
         this.auctionId = auctionId;
     }
 
-    public Long getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(Long position) {
+    public void setPosition(int position) {
         this.position = position;
     }
 }

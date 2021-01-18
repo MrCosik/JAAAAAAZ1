@@ -11,14 +11,20 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
-    @Column(name = "title")
-    private String title;
+    private Long id;
     @Column(name = "section_id")
     private Long sectionId;
+    @Column(name = "title")
+    private String title;
 
-    @ManyToMany
-    Set<AuctionEntity> auctions = new HashSet<>();
+    @Transient
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    Set<AuctionEntity> containedInCategories = new HashSet<>();
+
+
+//    @ManyToMany
+//    Set<AuctionEntity> auctions = new HashSet<>();
 
 
 
@@ -35,15 +41,11 @@ public class CategoryEntity {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getSectionId() {
@@ -52,6 +54,14 @@ public class CategoryEntity {
 
     public void setSectionId(Long sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 
