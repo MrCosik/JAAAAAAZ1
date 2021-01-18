@@ -16,11 +16,6 @@ public class Roles {
     private String role;
 
     public Roles() {}
-//    static {
-//        new Roles("admin");
-//        new Roles("user");
-//
-//    }
 
     public Roles(String role) {
         this.role = role;
@@ -41,12 +36,4 @@ public class Roles {
     public void setRole(String role) {
         this.role = role;
     }
-
-//    public UserEntity getUserEntity() {
-//        return userEntity;
-//    }
-//
-//    public void setUserEntity(UserEntity userEntity) {
-//        this.userEntity = userEntity;
-//    }
 }

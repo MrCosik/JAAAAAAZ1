@@ -10,8 +10,8 @@ public class ParameterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "value")
-    private String value;
+    @Column(name = "key")
+    private String key;
 
     @OneToMany(
             mappedBy = "parameterEntity",
@@ -32,11 +32,11 @@ public class ParameterEntity {
     }
 
     public String getValue() {
-        return value;
+        return key;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(String key) {
+        this.key = key;
     }
 
     public Set<AuctionParameterEntity> getParameterValue() {

@@ -29,8 +29,12 @@ public class SectionService {
     }
 
     private void addCategoriesFromArray(SectionRequest sectionRequest, SectionEntity sectionEntity) {
+        if(sectionRequest.getCategories() != null){
         for(String e : sectionRequest.getCategories()){
             sectionEntity.addCategory(e);
+        }
+        }else {
+            System.out.println("Empty List");
         }
     }
 

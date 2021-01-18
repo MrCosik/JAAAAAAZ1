@@ -17,10 +17,10 @@ public class CategoryEntity {
     @Column(name = "title")
     private String title;
 
-    @Transient
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    Set<AuctionEntity> containedInCategories = new HashSet<>();
+//    @Transient
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "category_id", referencedColumnName = "id")
+//    Set<AuctionEntity> containedInCategories = new HashSet<>();
 
 
 //    @ManyToMany
@@ -33,11 +33,6 @@ public class CategoryEntity {
 
     public CategoryEntity(String title) {
         this.title = title;
-    }
-
-    public CategoryEntity(String title, Long sectionId) {
-        this.title = title;
-        this.sectionId = sectionId;
     }
 
     public Long getId() {

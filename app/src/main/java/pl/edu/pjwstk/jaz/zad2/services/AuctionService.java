@@ -30,7 +30,7 @@ public class AuctionService {
         for(String availableCategory : availableCategories){
             for(String receivedCategory : auctionRequest.getCategoryEntity()){
                 if(receivedCategory.equals(availableCategory)){
-                    newAuction.addCategory(receivedCategory);
+                    //newAuction.addCategory(receivedCategory);
                 }
             }
         }

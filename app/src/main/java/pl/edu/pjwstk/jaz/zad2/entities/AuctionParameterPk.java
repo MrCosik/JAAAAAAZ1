@@ -9,9 +9,7 @@ import java.util.Objects;
 @Embeddable
 public class AuctionParameterPk implements Serializable {
 
-    @Column(name = "auction_id")
     Long auctionId;
-    @Column(name = "parameter_id")
     Long parameterId;
 
 

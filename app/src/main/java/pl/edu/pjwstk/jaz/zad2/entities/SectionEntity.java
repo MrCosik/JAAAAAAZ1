@@ -40,7 +40,7 @@ public class SectionEntity {
     }
 
     public void addCategory(String categoryTitle){
-        containsCategories.add(new CategoryEntity(categoryTitle, this.id));
+        containsCategories.add(new CategoryEntity(categoryTitle));
     }
 
     public void clearSet(){

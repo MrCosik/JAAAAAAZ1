@@ -7,7 +7,7 @@ CREATE TABLE section
 CREATE TABLE category
 (
     id         BIGSERIAL NOT NULL PRIMARY KEY,
-    section_id INT       NOT NULL,
+    section_id INT       ,
     title      VARCHAR   NOT NULL,
     CONSTRAINT section_id FOREIGN KEY (section_id)
         REFERENCES section (id)
@@ -17,7 +17,7 @@ CREATE TABLE category
 CREATE TABLE auction
 (
     id          BIGSERIAL NOT NULL PRIMARY KEY,
-    category_id INT       NOT NULL,
+    category_id INT       ,
     created_by  INT       NOT NULL,
     title       VARCHAR   NOT NULL,
     description VARCHAR   NOT NULL,
@@ -43,8 +43,8 @@ CREATE TABLE photo
 
 CREATE TABLE parameter
 (
-    id    BIGSERIAL NOT NULL PRIMARY KEY,
-    value VARCHAR
+    id  BIGSERIAL NOT NULL PRIMARY KEY,
+    key VARCHAR
 );
 
 CREATE TABLE auction_parameter

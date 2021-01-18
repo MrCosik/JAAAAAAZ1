@@ -10,7 +10,6 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    //@SequenceGenerator(name="seq-gen", allocationSize = 1)
     @Column(name = "id")
     private Long id;
     @Column(name = "username")
