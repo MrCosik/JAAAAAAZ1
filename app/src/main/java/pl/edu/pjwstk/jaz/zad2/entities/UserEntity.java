@@ -25,9 +25,9 @@ public class UserEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     Set<Roles> roles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "created_by", referencedColumnName = "id")
-    Set<AuctionEntity> createdAuctions = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "created_by", referencedColumnName = "id")
+//    Set<AuctionEntity> createdAuctions = new HashSet<>();
 
     public UserEntity(String username, String password) {
         this.username = username;

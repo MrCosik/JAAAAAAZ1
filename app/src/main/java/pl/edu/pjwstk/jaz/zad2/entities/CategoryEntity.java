@@ -17,15 +17,6 @@ public class CategoryEntity {
     @Column(name = "title")
     private String title;
 
-//    @Transient
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "category_id", referencedColumnName = "id")
-//    Set<AuctionEntity> containedInCategories = new HashSet<>();
-
-
-//    @ManyToMany
-//    Set<AuctionEntity> auctions = new HashSet<>();
-
 
 
     public CategoryEntity() {

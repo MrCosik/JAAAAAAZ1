@@ -21,6 +21,8 @@ public class AuctionEntity {
     @Column(name = "price")
     private int price;
 
+//    @ManyToOne
+//    Long
 
     @Transient
     @OneToMany(cascade = CascadeType.ALL)

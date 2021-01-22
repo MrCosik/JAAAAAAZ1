@@ -15,7 +15,7 @@ public class SectionEntity {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "section_id", referencedColumnName = "id")
     Set<CategoryEntity> containsCategories = new HashSet<>();
 
