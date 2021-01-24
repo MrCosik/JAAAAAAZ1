@@ -9,7 +9,7 @@ import java.util.Set;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "username")
@@ -25,16 +25,14 @@ public class UserEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     Set<Roles> roles = new HashSet<>();
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "created_by", referencedColumnName = "id")
-//    Set<AuctionEntity> createdAuctions = new HashSet<>();
 
     public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public UserEntity() {}
+    public UserEntity() {
+    }
 
 
     public Long getId() {
@@ -73,15 +71,20 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    public void addRole(String role){
+    public void addRole(String role) {
         roles.add(new Roles(role));
     }
 
     public Set<String> getRoles() {
         Set<String> roleNames = new HashSet<>();
-        for(Roles role : roles){
+        for (Roles role : roles) {
             roleNames.add(role.getRole());
         }
         return roleNames;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
     }
 }

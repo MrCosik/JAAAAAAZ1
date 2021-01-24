@@ -8,15 +8,17 @@ public class AuctionRequest {
 
     private String title;
     private String description;
-    private List<String> categoryEntity;
+    private String category;
+    private Long price;
     private List<String> photos;
 
 
-    public AuctionRequest(String title, String description, List<String> categoryEntity, List<String> photos) {
+    public AuctionRequest(String title, String description, String category, List<String> photos, Long price) {
         this.title = title;
         this.description = description;
-        this.categoryEntity = categoryEntity;
+        this.category = category;
         this.photos = photos;
+        this.price = price;
     }
 
     public AuctionRequest() {
@@ -38,11 +40,19 @@ public class AuctionRequest {
         this.description = description;
     }
 
-    public List<String> getCategoryEntity() {
-        return categoryEntity;
+    public String getCategory() {
+        return category;
     }
 
     public List<String> getPhotos() {
         return photos;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }

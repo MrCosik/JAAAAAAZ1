@@ -18,7 +18,7 @@ CREATE TABLE auction
 (
     id          BIGSERIAL NOT NULL PRIMARY KEY,
     category_id INT       ,
-    created_by  INT       NOT NULL,
+    created_by  INT       ,
     title       VARCHAR   NOT NULL,
     description VARCHAR   NOT NULL,
     price       INT       NOT NULL,

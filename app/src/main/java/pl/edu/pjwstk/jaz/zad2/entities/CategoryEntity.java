@@ -50,5 +50,4 @@ public class CategoryEntity {
         this.title = title;
     }
 
-
 }

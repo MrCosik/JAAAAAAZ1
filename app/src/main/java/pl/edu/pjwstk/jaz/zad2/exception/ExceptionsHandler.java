@@ -23,6 +23,11 @@ public class ExceptionsHandler {
         return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = {NoCategoryException.class})
+    public ResponseEntity<Object> handleNoCategoryException(NoCategoryException e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 //    @ExceptionHandler(value = {NoEmptyCategoryException.class})
 //    public ResponseEntity<Object> handleNoEmptyCategoryException(NoEmptyCategoryException e){
 //        return new ResponseEntity<Object>(e.getMessage())

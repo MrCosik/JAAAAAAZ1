@@ -19,15 +19,12 @@ public class AuctionEntity {
     @Column(name = "description")
     private String description;
     @Column(name = "price")
-    private int price;
+    private Long price;
 
-//    @ManyToOne
-//    Long
 
-    @Transient
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "auction_id", referencedColumnName = "id")
-    private final Set<PhotoEntity> photos = new HashSet<>();
+    Set<PhotoEntity> photos = new HashSet<>();
 
     @OneToMany(
             mappedBy = "auctionEntity",
@@ -35,8 +32,6 @@ public class AuctionEntity {
             orphanRemoval = true
     )
     private Set<AuctionParameterEntity> parameterValue;
-
-
 
 
 
@@ -67,19 +62,15 @@ public class AuctionEntity {
         this.description = description;
     }
 
-//    public void addCategory(String categoryName) {
-//        containedInCategories.add(new CategoryEntity(categoryName));
-//    }
-
     public void addPhoto(String photoTitle, int photoPosition) {
         photos.add(new PhotoEntity(photoTitle, photoPosition));
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -89,5 +80,13 @@ public class AuctionEntity {
 
     public void setCreatorsId(Long creatorsId) {
         this.creatorsId = creatorsId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 }

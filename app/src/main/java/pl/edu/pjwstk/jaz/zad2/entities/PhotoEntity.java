@@ -10,7 +10,7 @@ public class PhotoEntity {
     @Column(name = "id")
     private Long id;
     @Column(name = "auction_id")
-    private int auctionId;
+    private Long auctionId;
     @Column(name = "link")
     private String link;
     @Column(name = "position")
@@ -24,9 +24,9 @@ public class PhotoEntity {
         this.position = position;
     }
 
-    public Long getId() {
-        return id;
-    }
+//    //public Long getId() {
+//        return id;
+//    }
 
     public String getLink() {
         return link;
@@ -36,11 +36,11 @@ public class PhotoEntity {
         this.link = link;
     }
 
-    public int getAuctionId() {
+    public Long getAuctionId() {
         return auctionId;
     }
 
-    public void setAuctionId(int auctionId) {
+    public void setAuctionId(Long auctionId) {
         this.auctionId = auctionId;
     }
 
