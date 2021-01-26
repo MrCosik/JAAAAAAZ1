@@ -11,6 +11,9 @@ import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
 import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
 import pl.edu.pjwstk.jaz.zad2.services.AuctionService;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @RestController
 public class AuctionController {
 
@@ -22,13 +25,7 @@ public class AuctionController {
 
     @PostMapping("/createAuction")
     public void createNewAuction(@RequestBody AuctionRequest auctionRequest) throws NoCategoryException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsersId = null;
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            currentUsersId = authentication.getName();
-            System.out.println(currentUsersId);
-        }
-        auctionService.createAuction(auctionRequest, currentUsersId);
+        auctionService.createAuction(auctionRequest);
 
     }
 
@@ -36,5 +33,6 @@ public class AuctionController {
     public void editAuction(@PathVariable int id, @RequestBody AuctionRequest auctionRequest){
         auctionService.editAuction(id,auctionRequest);
     }
+
 
 }

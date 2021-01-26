@@ -13,8 +13,14 @@ public class AuctionParameterPk implements Serializable {
     Long parameterId;
 
 
+    public AuctionParameterPk(Long auctionId, Long parameterId) {
+        this.auctionId = auctionId;
+        this.parameterId = parameterId;
+    }
     public AuctionParameterPk() {
     }
+
+
 
     public Long getAuctionId() {
         return auctionId;
@@ -37,8 +43,7 @@ public class AuctionParameterPk implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuctionParameterPk that = (AuctionParameterPk) o;
-        return auctionId.equals(that.auctionId) &&
-                parameterId.equals(that.parameterId);
+        return Objects.equals(auctionId, that.auctionId) && Objects.equals(parameterId, that.parameterId);
     }
 
     @Override

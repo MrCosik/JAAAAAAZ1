@@ -31,7 +31,7 @@ public class AuctionEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<AuctionParameterEntity> parameterValue;
+    private Set<AuctionParameterEntity> parameterValue = new HashSet<>();
 
 
 
@@ -88,5 +88,10 @@ public class AuctionEntity {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public void addAuctionParameter(ParameterEntity param, String paramValue, AuctionParameterEntity auctionParameterEntity){
+        parameterValue.add(auctionParameterEntity);
+        param.getParameterValue().add(auctionParameterEntity);
     }
 }

@@ -1,6 +1,7 @@
 package pl.edu.pjwstk.jaz.zad2.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,11 +17,16 @@ public class ParameterEntity {
     @OneToMany(
             mappedBy = "parameterEntity",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
     )
-    private Set<AuctionParameterEntity> parameterValue;
+    private Set<AuctionParameterEntity> parameterValue = new HashSet<>();
 
     public ParameterEntity() {
+    }
+
+    public ParameterEntity(String key) {
+        this.key = key;
     }
 
     public Long getId() {
