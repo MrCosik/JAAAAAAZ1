@@ -37,11 +37,11 @@ public class ParameterEntity {
         this.id = id;
     }
 
-    public String getValue() {
+    public String getKey() {
         return key;
     }
 
-    public void setValue(String key) {
+    public void setKey(String key) {
         this.key = key;
     }
 

@@ -22,16 +22,17 @@ public class AuctionEntity {
     private Long price;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "auction_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "auction_id")
     Set<PhotoEntity> photos = new HashSet<>();
 
     @OneToMany(
             mappedBy = "auctionEntity",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
     )
-    private Set<AuctionParameterEntity> parameterValue = new HashSet<>();
+    private final Set<AuctionParameterEntity> parameterValue = new HashSet<>();
 
 
 

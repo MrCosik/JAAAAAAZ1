@@ -28,15 +28,7 @@ public class SectionService {
         em.persist(sectionEntity);
     }
 
-    private void addCategoriesFromArray(SectionRequest sectionRequest, SectionEntity sectionEntity) {
-        if(sectionRequest.getCategories() != null){
-        for(String e : sectionRequest.getCategories()){
-            sectionEntity.addCategory(e);
-        }
-        }else {
-            System.out.println("Empty List");
-        }
-    }
+
 
     public void updateSection(Long id, SectionRequest sectionRequest){
         SectionEntity updatedSection = em.find(SectionEntity.class,id);
@@ -51,6 +43,16 @@ public class SectionService {
     private void flushAndClear() {
         em.flush();
         em.clear();
+    }
+
+    private void addCategoriesFromArray(SectionRequest sectionRequest, SectionEntity sectionEntity) {
+        if(sectionRequest.getCategories() != null){
+            for(String e : sectionRequest.getCategories()){
+                sectionEntity.addCategory(e);
+            }
+        }else {
+            System.out.println("Empty List");
+        }
     }
 
 //

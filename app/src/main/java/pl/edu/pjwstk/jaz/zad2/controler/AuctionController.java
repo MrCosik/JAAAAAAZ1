@@ -3,16 +3,15 @@ package pl.edu.pjwstk.jaz.zad2.controler;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.edu.pjwstk.jaz.zad2.entities.AuctionEntity;
 import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
 import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
 import pl.edu.pjwstk.jaz.zad2.services.AuctionService;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 public class AuctionController {
@@ -30,8 +29,13 @@ public class AuctionController {
     }
 
     @PostMapping("/editAuction/{id}")
-    public void editAuction(@PathVariable int id, @RequestBody AuctionRequest auctionRequest){
+    public void editAuction(@PathVariable Long id, @RequestBody AuctionRequest auctionRequest){
         auctionService.editAuction(id,auctionRequest);
+    }
+
+    @GetMapping("/api/auctions")
+    public List<AuctionEntity> listAuction(){
+        return auctionService.returnAuctions();
     }
 
 

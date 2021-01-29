@@ -77,4 +77,14 @@ public class AuctionParameterEntity {
     public int hashCode() {
         return Objects.hash(auctionParameterPk, auctionEntity, parameterEntity, value);
     }
+
+    @Override
+    public String toString() {
+        return "AuctionParameterEntity{" +
+                "auctionParameterPk=" + auctionParameterPk +
+                ", auctionEntity=" + auctionEntity +
+                ", parameterEntity=" + parameterEntity +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }
