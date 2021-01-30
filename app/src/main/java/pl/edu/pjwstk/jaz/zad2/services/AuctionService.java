@@ -1,6 +1,5 @@
 package pl.edu.pjwstk.jaz.zad2.services;
 
-import ch.qos.logback.core.joran.action.ParamAction;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pjwstk.jaz.zad2.entities.*;
 import pl.edu.pjwstk.jaz.zad2.exception.BadCategoryRequestException;
+import pl.edu.pjwstk.jaz.zad2.exception.NoAuctionException;
 import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
 import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.Map;
 
 @Transactional
 @Service
@@ -33,18 +32,19 @@ public class AuctionService {
         //check if category from request exists in DB
         List<String> availableCategories = categoryService.showCategories();
 
-        List<ParameterEntity> availableParameters = getParameterEntity();
+        List<ParameterEntity> availableParameters = getAllAvailableParametersFromParameterDB();
 
         int photoPosition = 1;
         //get current logged in user's name
-        Long currentUsersId = getCurrentUsersId();
+        final Long currentUsersId = getCurrentUsersId();
+
         //create new auction
         AuctionEntity newAuction = new AuctionEntity();
 
         //create category object that goes to the auction
         //and check if its not null, otherwise an exception will be thrown
         CategoryEntity category = getCategoryIdWithItsTitle(auctionRequest.getCategory());
-        if(category == null)
+        if (category == null)
             throw new NoCategoryException("No such category");
 
         // set auction parameters
@@ -77,53 +77,63 @@ public class AuctionService {
                     flushAndClear();
                     AuctionParameterEntity auctionParameterEntity = new AuctionParameterEntity(newAuction, parameterEntity, v);
                     auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(newAuction.getId(), parameterEntity.getId()));
-                    newAuction.addAuctionParameter(parameterEntity, v, auctionParameterEntity);
+                    newAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
                 }
         );
         em.merge(newAuction);
     }
 
 
-
     public void editAuction(Long id, AuctionRequest auctionRequest) {
         AuctionEntity updatedAuction = em.find(AuctionEntity.class, id);
-        if(updatedAuction != null && updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
-            List<AuctionParameterEntity> updatedAuctionParameter = getAuctionParameterEntity(id);
+        if (updatedAuction != null && updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
+            List<ParameterEntity> allAuctionParameter = getAllAvailableParametersFromParameterDB();
 
 
-            updatedAuction.setTitle(auctionRequest.getTitle());
-            updatedAuction.setCategoryId(getCategoryIdWithItsTitle(auctionRequest.getCategory()).getId());
-            updatedAuction.setDescription(auctionRequest.getDescription());
-            updatedAuction.setPrice(auctionRequest.getPrice());
+            if (auctionRequest.getTitle() != null)
+                updatedAuction.setTitle(auctionRequest.getTitle());
+            if (auctionRequest.getCategory() != null)
+                updatedAuction.setCategoryId(getCategoryIdWithItsTitle(auctionRequest.getCategory()).getId());
+            if (auctionRequest.getDescription() != null)
+                updatedAuction.setDescription(auctionRequest.getDescription());
+            if (auctionRequest.getPrice() != null)
+                updatedAuction.setPrice(auctionRequest.getPrice());
 
 //            em.merge(updatedAuction);
 
-            auctionRequest.getParameters().forEach((k,v) ->{
-                if (!updatedAuctionParameter.isEmpty()) {
+            auctionRequest.getParameters().forEach((k, v) -> {
 
-                    for (AuctionParameterEntity ape : updatedAuctionParameter) {
-                        System.out.println(ape);
-                        ape.setValue(v);
-                        ParameterEntity updatedParameter = em.find(ParameterEntity.class, ape.getParameterEntity().getId());
-                        updatedParameter.setKey(k);
-                        em.merge(updatedParameter);
-                        em.merge(ape);
+                AuctionParameterEntity auctionParameterEntity;
 
-                    }
-                }else {
-                    ParameterEntity parameterEntity = new ParameterEntity(k);
-                    em.merge(parameterEntity);
-                    flushAndClear();
-
-                    AuctionParameterEntity auctionParameterEntity = new AuctionParameterEntity(updatedAuction, parameterEntity, v);
-                    auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(updatedAuction.getId(), parameterEntity.getId()));
-                    updatedAuction.addAuctionParameter(parameterEntity, v, auctionParameterEntity);
+                ParameterEntity parameterEntity = getParameterEntity(k);
+                if (getParameterEntity(k) == null) {
+                    parameterEntity = new ParameterEntity(k);
+                    em.persist(parameterEntity);
                 }
-            });
-            }
-            em.merge(updatedAuction);
-        }
 
+                em.merge(parameterEntity);
+                em.merge(updatedAuction);
+                flushAndClear();
+
+
+                if (getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId()) != null) {
+                    auctionParameterEntity = getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId());
+                    auctionParameterEntity.setValue(v);
+                    em.merge(auctionParameterEntity);
+                } else {
+                    auctionParameterEntity = new AuctionParameterEntity(updatedAuction, parameterEntity, v);
+                    auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(updatedAuction.getId(), parameterEntity.getId()));
+                    updatedAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
+                }
+
+
+
+                em.merge(updatedAuction);
+            });
+        } else {
+            throw new NoAuctionException("Ni ma aukcji");
+        }
+    }
 
 
     private Long getCurrentUsersId() {
@@ -161,28 +171,34 @@ public class AuctionService {
         return null;
     }
 
-    public List<AuctionParameterEntity> getAuctionParameterEntity(Long id){
-        try{
-            return em.createQuery("SELECT ape FROM AuctionParameterEntity ape where ape.auctionEntity.id = :id", AuctionParameterEntity.class)
-                    .setParameter("id",id)
-                    .getResultList();
+    public AuctionParameterEntity getAuctionParameterEntity(Long auctionId, Long parameterId) {
+        try {
+            return em.createQuery("SELECT ape FROM AuctionParameterEntity ape where ape.auctionEntity.id = :auctionId AND ape.parameterEntity.id = :parameterId", AuctionParameterEntity.class)
+                    .setParameter("auctionId", auctionId)
+                    .setParameter("parameterId", parameterId)
+                    .getSingleResult();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
         return null;
     }
 
-    public List<ParameterEntity> getParameterEntity(){
-        try{
+    public List<ParameterEntity> getAllAvailableParametersFromParameterDB() {
+        try {
             return em.createQuery("SELECT pe FROM ParameterEntity pe", ParameterEntity.class)
                     .getResultList();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
         return null;
+    }
+
+    public void deleteUnusedParametersAuctionEntities(Long unusedParameterId){
+        em.createQuery("DELETE FROM AuctionParameterEntity ape where ape.parameterEntity.id = :unusedParameterId")
+                .setParameter("unusedParameterId", unusedParameterId);
     }
 
 
@@ -195,8 +211,4 @@ public class AuctionService {
     }
 
 
-    public List<AuctionEntity> returnAuctions() {
-        return em.createQuery("SELECT ae FROM AuctionEntity ae", AuctionEntity.class)
-                .getResultList();
-    }
 }

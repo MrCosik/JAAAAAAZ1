@@ -1,23 +1,22 @@
 package pl.edu.pjwstk.jaz.zad2.controler;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pjwstk.jaz.zad2.entities.AuctionEntity;
 import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
 import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
 import pl.edu.pjwstk.jaz.zad2.services.AuctionService;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 public class AuctionController {
 
+
+
     AuctionService auctionService;
 
+    @Autowired
     public AuctionController(AuctionService auctionService) {
         this.auctionService = auctionService;
     }
@@ -33,10 +32,11 @@ public class AuctionController {
         auctionService.editAuction(id,auctionRequest);
     }
 
-    @GetMapping("/api/auctions")
-    public List<AuctionEntity> listAuction(){
-        return auctionService.returnAuctions();
-    }
+//    @GetMapping("/Auctions")
+//    public List listAuction(){
+//        return auctionService.returnAuctionParameterEntityByAuctionId();
+//    }
+
 
 
 }

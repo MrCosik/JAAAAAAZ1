@@ -1,5 +1,7 @@
 package pl.edu.pjwstk.jaz.zad2.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -91,7 +93,7 @@ public class AuctionEntity {
         this.categoryId = categoryId;
     }
 
-    public void addAuctionParameter(ParameterEntity param, String paramValue, AuctionParameterEntity auctionParameterEntity){
+    public void addAuctionParameter(ParameterEntity param, AuctionParameterEntity auctionParameterEntity){
         parameterValue.add(auctionParameterEntity);
         param.getParameterValue().add(auctionParameterEntity);
     }

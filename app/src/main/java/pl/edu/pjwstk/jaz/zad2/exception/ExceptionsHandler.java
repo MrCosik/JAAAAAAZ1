@@ -32,4 +32,9 @@ public class ExceptionsHandler {
     public ResponseEntity<Object> handleBadCategoryRequestException(BadCategoryRequestException e){
         return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {NoAuctionException.class})
+    public ResponseEntity<Object> handleNoAuctionExceptionException(NoAuctionException e){
+        return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
