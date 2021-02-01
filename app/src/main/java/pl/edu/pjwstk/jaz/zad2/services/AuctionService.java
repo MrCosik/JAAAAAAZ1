@@ -1,5 +1,6 @@
 package pl.edu.pjwstk.jaz.zad2.services;
 
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,9 +11,11 @@ import pl.edu.pjwstk.jaz.zad2.exception.BadCategoryRequestException;
 import pl.edu.pjwstk.jaz.zad2.exception.NoAuctionException;
 import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
 import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
+import pl.edu.pjwstk.jaz.zad2.request.PhotoRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -90,7 +93,7 @@ public class AuctionService {
             List<ParameterEntity> allAuctionParameter = getAllAvailableParametersFromParameterDB();
 
 
-            if (auctionRequest.getTitle() != null)
+            if (auctionRequest.getTitle() != null || auctionRequest.getTitle().equals(""))
                 updatedAuction.setTitle(auctionRequest.getTitle());
             if (auctionRequest.getCategory() != null)
                 updatedAuction.setCategoryId(getCategoryIdWithItsTitle(auctionRequest.getCategory()).getId());
@@ -102,7 +105,6 @@ public class AuctionService {
 //            em.merge(updatedAuction);
 
             auctionRequest.getParameters().forEach((k, v) -> {
-
                 AuctionParameterEntity auctionParameterEntity;
 
                 ParameterEntity parameterEntity = getParameterEntity(k);
@@ -126,13 +128,45 @@ public class AuctionService {
                     updatedAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
                 }
 
-
-
                 em.merge(updatedAuction);
             });
         } else {
             throw new NoAuctionException("Ni ma aukcji");
         }
+    }
+
+
+    public List<ShowAuctionEntity> showAuctionsWithOnePhoto() {
+        //get current logged in user's name
+        final Long currentUsersId = getCurrentUsersId();
+        List<ShowAuctionEntity> allUsersRefactoredAuctions = new ArrayList<>();
+        List<AuctionEntity> allUserAuctions = getAllUsersAuctions(currentUsersId);
+
+        for (AuctionEntity ae : allUserAuctions) {
+            allUsersRefactoredAuctions.add(new ShowAuctionEntity(
+                    ae.getId(),
+                    getCategorysTitleWithItsId(ae.getCategoryId()).getTitle(),
+                    ae.getTitle(),
+                    ae.getDescription(),
+                    getMinaturePhotoTitle(ae.getId()).getLink()
+            ));
+        }
+        return allUsersRefactoredAuctions;
+    }
+
+    public void editPhotosInAuction(Long id, PhotoRequest photoRequest) {
+        photoRequest.getNewPhotos().forEach((link) -> {
+                    AuctionEntity updatedAuction = em.find(AuctionEntity.class, id);
+                    if(updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
+                        int numberOfAllPhotos = getAllAuctionsPhoto(id).size();
+                        if (getSpecificAuctionsPhoto(id, link) == null) {
+                            updatedAuction.addPhoto(link, numberOfAllPhotos + 1);
+                        }
+                        em.merge(updatedAuction);
+                    }else
+                        throw new NoAuctionException("Ni twoja aukcja");
+                }
+        );
     }
 
 
@@ -154,7 +188,19 @@ public class AuctionService {
                     .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("No such category");
+            System.out.println("No such category id");
+        }
+        return null;
+    }
+
+    public CategoryEntity getCategorysTitleWithItsId(Long id) {
+        try {
+            return em.createQuery("SELECT ce FROM CategoryEntity ce WHERE ce.id = :id", CategoryEntity.class)
+                    .setParameter("id", id)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("No such category title");
         }
         return null;
     }
@@ -192,18 +238,54 @@ public class AuctionService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return null;
     }
 
-    public void deleteUnusedParametersAuctionEntities(Long unusedParameterId){
-        em.createQuery("DELETE FROM AuctionParameterEntity ape where ape.parameterEntity.id = :unusedParameterId")
-                .setParameter("unusedParameterId", unusedParameterId);
+    public List<AuctionEntity> getAllUsersAuctions(Long id) {
+        try {
+            return em.createQuery("SELECT ae FROM AuctionEntity ae WHERE ae.creatorsId = :id", AuctionEntity.class)
+                    .setParameter("id", id)
+                    .getResultList();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
+    public PhotoEntity getMinaturePhotoTitle(Long auctionId) {
+        try {
+            return em.createQuery("SELECT pe FROM PhotoEntity pe WHERE pe.auctionId = :id order by pe.position", PhotoEntity.class)
+                    .setParameter("id", auctionId)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
+    public PhotoEntity getSpecificAuctionsPhoto(Long auctionId, String link) {
+        try {
+            return em.createQuery("SELECT pe FROM PhotoEntity pe WHERE pe.auctionId = :id AND pe.link = :link", PhotoEntity.class)
+                    .setParameter("id", auctionId)
+                    .setParameter("link", link)
+                    .getSingleResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
-
+    public List<PhotoEntity> getAllAuctionsPhoto(Long auctionId) {
+        try {
+            return em.createQuery("SELECT pe FROM PhotoEntity pe WHERE pe.auctionId = :id", PhotoEntity.class)
+                    .setParameter("id", auctionId)
+                    .getResultList();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
     private void flushAndClear() {
         em.flush();

@@ -1,14 +1,14 @@
 CREATE TABLE section
 (
     id    BIGSERIAL NOT NULL PRIMARY KEY,
-    title VARCHAR   NOT NULL
+    title VARCHAR
 );
 
 CREATE TABLE category
 (
     id         BIGSERIAL NOT NULL PRIMARY KEY,
     section_id INT       ,
-    title      VARCHAR   NOT NULL,
+    title      VARCHAR   ,
     CONSTRAINT section_id FOREIGN KEY (section_id)
         REFERENCES section (id)
         ON UPDATE CASCADE ON DELETE CASCADE
@@ -19,9 +19,9 @@ CREATE TABLE auction
     id          BIGSERIAL NOT NULL PRIMARY KEY,
     category_id INT       ,
     created_by  INT       ,
-    title       VARCHAR   NOT NULL,
-    description VARCHAR   NOT NULL,
-    price       INT       NOT NULL,
+    title       VARCHAR   ,
+    description VARCHAR   ,
+    price       INT       ,
     CONSTRAINT created_by FOREIGN KEY (created_by)
         REFERENCES app_user (id)
         ON UPDATE CASCADE ON DELETE CASCADE,

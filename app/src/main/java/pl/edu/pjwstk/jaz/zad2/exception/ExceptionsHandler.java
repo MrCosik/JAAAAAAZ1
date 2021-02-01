@@ -37,4 +37,14 @@ public class ExceptionsHandler {
     public ResponseEntity<Object> handleNoAuctionExceptionException(NoAuctionException e){
         return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {WrongSectionRequestException.class})
+    public ResponseEntity<Object> handleWrongSectionRequestException(WrongSectionRequestException e){
+        return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {NoSectionException.class})
+    public ResponseEntity<Object> handleNoSectionException(NoSectionException e){
+        return new ResponseEntity<Object>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
