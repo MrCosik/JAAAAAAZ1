@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import pl.edu.pjwstk.jaz.IntegrationTest;
 import pl.edu.pjwstk.jaz.zad2.request.LoginRequest;
 import pl.edu.pjwstk.jaz.zad2.request.RegisterRequest;
@@ -61,7 +62,9 @@ public class EditSectionTest {
                 .cookies(response.getCookies())
                 .body(new SectionRequest("Pies", categoryList))
                 .contentType(ContentType.JSON)
-                .post("/api/newSection");
+                .post("/api/newSection")
+                .then()
+                .statusCode(org.springframework.http.HttpStatus.OK.value());
     }
 
     @Test

@@ -29,6 +29,8 @@ public class SectionService {
             sectionEntity.setTitle(sectionRequest.getTitle());
             addCategoriesFromArray(sectionRequest, sectionEntity);
             em.persist(sectionEntity);
+            flushAndClear();
+            System.out.println("Sectione added");
         } else throw new WrongSectionRequestException("Not enough data");
 
 
@@ -66,10 +68,5 @@ public class SectionService {
         }
     }
 
-//
-//    public void getCategoriesWithoutSection(){
-//        em.createQuery("delete from CategoryEntity where sectionId IS NULL").executeUpdate();
-//
-//    }
 
 }

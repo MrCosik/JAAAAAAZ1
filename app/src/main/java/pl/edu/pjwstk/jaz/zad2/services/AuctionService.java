@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pjwstk.jaz.zad2.entities.*;
+import pl.edu.pjwstk.jaz.zad2.exception.BadAuctionRequestException;
 import pl.edu.pjwstk.jaz.zad2.exception.BadCategoryRequestException;
 import pl.edu.pjwstk.jaz.zad2.exception.NoAuctionException;
 import pl.edu.pjwstk.jaz.zad2.exception.NoCategoryException;
@@ -33,9 +34,8 @@ public class AuctionService {
 
     public void createAuction(AuctionRequest auctionRequest) throws NoCategoryException {
         //check if category from request exists in DB
-        List<String> availableCategories = categoryService.showCategories();
+//        List availableCategories = categoryService.showCategories();
 
-        List<ParameterEntity> availableParameters = getAllAvailableParametersFromParameterDB();
 
         int photoPosition = 1;
         //get current logged in user's name
@@ -47,42 +47,53 @@ public class AuctionService {
         //create category object that goes to the auction
         //and check if its not null, otherwise an exception will be thrown
         CategoryEntity category = getCategoryIdWithItsTitle(auctionRequest.getCategory());
+
         if (category == null)
             throw new NoCategoryException("No such category");
 
+        newAuction.setCategoryId(em.find(CategoryEntity.class, category.getId()).getId());
+
         // set auction parameters
-        newAuction.setTitle(auctionRequest.getTitle());
-        newAuction.setDescription(auctionRequest.getDescription());
+        if (auctionRequest.getTitle() != null && !auctionRequest.getTitle().equals(""))
+            newAuction.setTitle(auctionRequest.getTitle());
+        else throw new BadCategoryRequestException("Empty title");
+
+        if (auctionRequest.getDescription() != null && !auctionRequest.getDescription().equals(""))
+            newAuction.setDescription(auctionRequest.getDescription());
+        else throw new BadCategoryRequestException("Empty description");
 
         if (currentUsersId != null)
             newAuction.setCreatorsId(currentUsersId);
         else throw new BadCategoryRequestException("Wrong user id");
 
 
-        if (availableCategories.contains(category.getTitle()))
-            newAuction.setCategoryId(category.getId());
-        else throw new NoCategoryException("No such category");
-
         //add photos' links to a set
-        for (String photoTitle : auctionRequest.getPhotos()) {
-            newAuction.addPhoto(photoTitle, photoPosition);
-            photoPosition++;
-        }
-        newAuction.setPrice(auctionRequest.getPrice());
+        if (!auctionRequest.getPhotos().isEmpty() && auctionRequest.getPhotos() != null) {
+            for (String photoTitle : auctionRequest.getPhotos()) {
+                newAuction.addPhoto(photoTitle, photoPosition);
+                photoPosition++;
+            }
+        } else throw new BadCategoryRequestException("No photos added");
+
+        if (auctionRequest.getPrice() != null)
+            newAuction.setPrice(auctionRequest.getPrice());
+        else throw new BadCategoryRequestException("Empty price field");
 
 
-        auctionRequest.getParameters().forEach((k, v) -> {
-                    ParameterEntity parameterEntity = getParameterEntity(k);
-                    if (getParameterEntity(k) == null) {
-                        parameterEntity = new ParameterEntity(k);
-                        em.persist(parameterEntity);
+        if (!auctionRequest.getParameters().isEmpty() && auctionRequest.getParameters() != null) {
+            auctionRequest.getParameters().forEach((k, v) -> {
+                        ParameterEntity parameterEntity = getParameterEntity(k);
+                        if (getParameterEntity(k) == null) {
+                            parameterEntity = new ParameterEntity(k);
+                            em.persist(parameterEntity);
+                        }
+                        flushAndClear();
+                        AuctionParameterEntity auctionParameterEntity = new AuctionParameterEntity(newAuction, parameterEntity, v);
+                        auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(newAuction.getId(), parameterEntity.getId()));
+                        newAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
                     }
-                    flushAndClear();
-                    AuctionParameterEntity auctionParameterEntity = new AuctionParameterEntity(newAuction, parameterEntity, v);
-                    auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(newAuction.getId(), parameterEntity.getId()));
-                    newAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
-                }
-        );
+            );
+        } else throw new BadCategoryRequestException("No parameters added");
         em.merge(newAuction);
     }
 
@@ -90,46 +101,57 @@ public class AuctionService {
     public void editAuction(Long id, AuctionRequest auctionRequest) {
         AuctionEntity updatedAuction = em.find(AuctionEntity.class, id);
         if (updatedAuction != null && updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
-            List<ParameterEntity> allAuctionParameter = getAllAvailableParametersFromParameterDB();
 
 
             if (auctionRequest.getTitle() != null || auctionRequest.getTitle().equals(""))
                 updatedAuction.setTitle(auctionRequest.getTitle());
-            if (auctionRequest.getCategory() != null)
+            else throw new BadAuctionRequestException("Empty title");
+
+            if (auctionRequest.getCategory() != null && getCategoryIdWithItsTitle(auctionRequest.getCategory()) != null)
                 updatedAuction.setCategoryId(getCategoryIdWithItsTitle(auctionRequest.getCategory()).getId());
+            else throw new BadAuctionRequestException("Empty category or category not in the DB");
+
             if (auctionRequest.getDescription() != null)
                 updatedAuction.setDescription(auctionRequest.getDescription());
+            else throw new BadAuctionRequestException("Empty description");
+
             if (auctionRequest.getPrice() != null)
                 updatedAuction.setPrice(auctionRequest.getPrice());
+            else throw new BadAuctionRequestException("Empty price");
 
 //            em.merge(updatedAuction);
 
-            auctionRequest.getParameters().forEach((k, v) -> {
-                AuctionParameterEntity auctionParameterEntity;
+            if (!auctionRequest.getParameters().isEmpty()) {
 
-                ParameterEntity parameterEntity = getParameterEntity(k);
-                if (getParameterEntity(k) == null) {
-                    parameterEntity = new ParameterEntity(k);
-                    em.persist(parameterEntity);
-                }
+                auctionRequest.getParameters().forEach((k, v) -> {
+                            AuctionParameterEntity auctionParameterEntity;
 
-                em.merge(parameterEntity);
-                em.merge(updatedAuction);
-                flushAndClear();
+                            ParameterEntity parameterEntity = getParameterEntity(k);
+                            if (getParameterEntity(k) == null) {
+                                parameterEntity = new ParameterEntity(k);
+                                em.persist(parameterEntity);
+                            }
+
+                            em.merge(parameterEntity);
+                            em.merge(updatedAuction);
+                            flushAndClear();
 
 
-                if (getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId()) != null) {
-                    auctionParameterEntity = getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId());
-                    auctionParameterEntity.setValue(v);
-                    em.merge(auctionParameterEntity);
-                } else {
-                    auctionParameterEntity = new AuctionParameterEntity(updatedAuction, parameterEntity, v);
-                    auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(updatedAuction.getId(), parameterEntity.getId()));
-                    updatedAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
-                }
+                            if (getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId()) != null) {
+                                auctionParameterEntity = getAuctionParameterEntity(updatedAuction.getId(), parameterEntity.getId());
+                                auctionParameterEntity.setValue(v);
+                                em.merge(auctionParameterEntity);
+                            } else {
+                                auctionParameterEntity = new AuctionParameterEntity(updatedAuction, parameterEntity, v);
+                                auctionParameterEntity.setAuctionParameterKey(new AuctionParameterPk(updatedAuction.getId(), parameterEntity.getId()));
+                                updatedAuction.addAuctionParameter(parameterEntity, auctionParameterEntity);
+                            }
 
-                em.merge(updatedAuction);
-            });
+
+                            em.merge(updatedAuction);
+                        }
+                );
+            } else throw new BadAuctionRequestException("Empty price");
         } else {
             throw new NoAuctionException("Ni ma aukcji");
         }
@@ -155,18 +177,22 @@ public class AuctionService {
     }
 
     public void editPhotosInAuction(Long id, PhotoRequest photoRequest) {
+        final Long currentUsersId = getCurrentUsersId();
+
+        if(!photoRequest.getNewPhotos().isEmpty()){
         photoRequest.getNewPhotos().forEach((link) -> {
                     AuctionEntity updatedAuction = em.find(AuctionEntity.class, id);
-                    if(updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
+                    if (updatedAuction != null && updatedAuction.getCreatorsId() == currentUsersId) {
                         int numberOfAllPhotos = getAllAuctionsPhoto(id).size();
                         if (getSpecificAuctionsPhoto(id, link) == null) {
                             updatedAuction.addPhoto(link, numberOfAllPhotos + 1);
                         }
                         em.merge(updatedAuction);
-                    }else
+                    } else
                         throw new NoAuctionException("Ni twoja aukcja");
                 }
-        );
+        );}
+        else throw new NoAuctionException("Empty photo list");
     }
 
 

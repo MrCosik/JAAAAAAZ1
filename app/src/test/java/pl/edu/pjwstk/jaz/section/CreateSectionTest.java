@@ -8,13 +8,12 @@ import org.junit.runner.RunWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.edu.pjwstk.jaz.IntegrationTest;
+import pl.edu.pjwstk.jaz.zad2.request.AuctionRequest;
 import pl.edu.pjwstk.jaz.zad2.request.LoginRequest;
 import pl.edu.pjwstk.jaz.zad2.request.RegisterRequest;
 import pl.edu.pjwstk.jaz.zad2.request.SectionRequest;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -110,6 +109,36 @@ public class CreateSectionTest {
                 .body(new SectionRequest(null, categoryList))
                 .contentType(ContentType.JSON)
                 .post("/api/newSection")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void creating_new_auction_as_admin_with_not_existing_category_name_should_return_400() {
+
+        Map<String, String> testParameterMap = new HashMap<>();
+        List<String> photoList = new ArrayList<>();
+
+        testParameterMap.put("key1", "val1");
+        testParameterMap.put("key2", "val2");
+        photoList.add("photo1");
+        photoList.add("photo2");
+
+        List<String> categoryList = Arrays.asList("test1", "test2");
+
+        var response = loginUser("admin", "admin");
+
+        given().log().all()
+                .cookies(response.getCookies())
+                .body(new SectionRequest("Pies", categoryList))
+                .contentType(ContentType.JSON)
+                .post("/api/newSection");
+
+        given().log().all()
+                .body(new AuctionRequest("test", "test", "Pies", 200L, photoList, testParameterMap))
+                .contentType(ContentType.JSON)
+                .cookies(response.getCookies())
+                .post("api/createAuction")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }

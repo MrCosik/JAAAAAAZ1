@@ -4,8 +4,11 @@ import java.util.List;
 
 public class SectionRequest {
 
-    private final String title;
-    private final List<String> categories;
+    private String title;
+    private List<String> categories;
+
+    public SectionRequest() {
+    }
 
     public SectionRequest(String title, List<String> categories) {
         this.title = title;
@@ -16,7 +19,15 @@ public class SectionRequest {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public List<String> getCategories() {
         return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }
