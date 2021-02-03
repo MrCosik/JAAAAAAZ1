@@ -40,9 +40,10 @@ public class SectionService {
     public void updateSection(Long id, SectionRequest sectionRequest) {
 
             SectionEntity updatedSection = em.find(SectionEntity.class, id);
-            if (updatedSection != null && !sectionRequest.getTitle().equals("") && !sectionRequest.getCategories().isEmpty()) {
+            if (updatedSection != null || !sectionRequest.getTitle().equals("") || !sectionRequest.getCategories().isEmpty()) {
                 if(sectionRequest.getTitle() != null)
                     updatedSection.setTitle(sectionRequest.getTitle());
+                else throw new NoSectionException("Empty title");
                 updatedSection.clearSet();
                 addCategoriesFromArray(sectionRequest, updatedSection);
                 em.merge(updatedSection);

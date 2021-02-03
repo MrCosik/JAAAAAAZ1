@@ -1,7 +1,7 @@
 package pl.edu.pjwstk.jaz.user;
 
 import io.restassured.http.ContentType;
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,13 +29,12 @@ public class RegisterTest {
 
     @Test
     public void register_user_should_respond_with_200(){
-        var response = given()
+ given()
                 .body(new RegisterRequest("user", "user"))
                 .contentType(ContentType.JSON)
                 .post("/api/register")
-                .thenReturn();
-
-        assertEquals(HttpStatus.SC_OK,response.getStatusCode());
+                .then()
+                .statusCode(HttpStatus.OK.value());
     }
 
     @Test
@@ -46,7 +45,7 @@ public class RegisterTest {
                 .post("/api/register")
                 .thenReturn();
 
-        assertEquals(HttpStatus.SC_BAD_REQUEST,response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
     }
 
 }

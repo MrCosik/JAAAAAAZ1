@@ -62,9 +62,7 @@ public class EditSectionTest {
                 .cookies(response.getCookies())
                 .body(new SectionRequest("Pies", categoryList))
                 .contentType(ContentType.JSON)
-                .post("/api/newSection")
-                .then()
-                .statusCode(org.springframework.http.HttpStatus.OK.value());
+                .post("/api/newSection");
     }
 
     @Test
@@ -97,7 +95,7 @@ public class EditSectionTest {
     }
 
     @Test
-    public void edit_section_under_2nd_id_as_admin_should_return_400(){
+    public void edit_section_under_3rd_id_as_admin_should_return_400(){
         var response = loginUser("admin", "admin");
         List<String> categoryList = Arrays.asList("test3", "test4");
 
@@ -105,7 +103,7 @@ public class EditSectionTest {
                 .cookies(response.getCookies())
                 .body(new SectionRequest("Kot", categoryList))
                 .contentType(ContentType.JSON)
-                .post("/api/editSection/2")
+                .post("/api/editSection/3")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
 

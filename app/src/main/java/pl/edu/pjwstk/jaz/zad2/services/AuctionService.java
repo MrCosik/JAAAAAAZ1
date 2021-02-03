@@ -101,9 +101,7 @@ public class AuctionService {
     public void editAuction(Long id, AuctionRequest auctionRequest) {
         AuctionEntity updatedAuction = em.find(AuctionEntity.class, id);
         if (updatedAuction != null && updatedAuction.getCreatorsId().equals(getCurrentUsersId())) {
-
-
-            if (auctionRequest.getTitle() != null || auctionRequest.getTitle().equals(""))
+            if (auctionRequest.getTitle() != null && !auctionRequest.getTitle().equals(""))
                 updatedAuction.setTitle(auctionRequest.getTitle());
             else throw new BadAuctionRequestException("Empty title");
 
@@ -118,6 +116,16 @@ public class AuctionService {
             if (auctionRequest.getPrice() != null)
                 updatedAuction.setPrice(auctionRequest.getPrice());
             else throw new BadAuctionRequestException("Empty price");
+
+            if(!auctionRequest.getPhotos().isEmpty()){
+                int photoPosition = 1;
+                updatedAuction.getPhotos().clear();
+                for(String link : auctionRequest.getPhotos()){
+                    updatedAuction.addPhoto(link,photoPosition);
+                    photoPosition++;
+                }
+            }
+
 
 //            em.merge(updatedAuction);
 
@@ -151,7 +159,7 @@ public class AuctionService {
                             em.merge(updatedAuction);
                         }
                 );
-            } else throw new BadAuctionRequestException("Empty price");
+            } else throw new BadAuctionRequestException("Empty parameters");
         } else {
             throw new NoAuctionException("Ni ma aukcji");
         }

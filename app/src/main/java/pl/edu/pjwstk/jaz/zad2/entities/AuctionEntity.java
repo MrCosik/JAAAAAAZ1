@@ -97,4 +97,8 @@ public class AuctionEntity {
         parameterValue.add(auctionParameterEntity);
         param.getParameterValue().add(auctionParameterEntity);
     }
+
+    public Set<PhotoEntity> getPhotos() {
+        return photos;
+    }
 }
