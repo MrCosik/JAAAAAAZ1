@@ -1,4 +1,4 @@
-# JAAAAAAZ1
+# Ebay-clone
 My first web app in Java/Spring with sprinkled of a little bit of SQL. 
 It's register/login system with ability to post internet auctions.
 For now the data is send in json to the server to be procesed.
